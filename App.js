@@ -19,8 +19,8 @@ import Intro from './app/components/Intro';
 
 // Use this link to access our backend!
 
-//export const dbUrl = 'http://172.16.23.244:8080';
-export const dbUrl = 'http://172.16.21.255:8080';
+export const dbUrl = 'http://172.16.34.11:8080';
+//export const dbUrl = 'http://172.16.21.255:8080';
 //export const dbUrl = 'http://172.16.23.11:8080';
 //export const dbUrl = 'http://192.168.1.4:8080';
 
