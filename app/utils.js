@@ -13,8 +13,11 @@ export const getValuationPrice = (valuation) => {
   else if (!valuation.algoPrice && valuation.scraperPrice)
     price = valuation.scraperPrice;
   
+  if (!price)
+    return 'Couldn\'t get a valid price for the product!';
+  
   // 0th index is dollars, 1st index is cents
-  [dollars, cents] = price ? [Math.round(price * 0.01), price % Math.round(price * 0.01)] : null;
+  [dollars, cents] = [Math.round(price * 0.01), price % Math.round(price * 0.01)];
 
   cents = cents < 10 ? '0' + cents.toString() : cents.toString();
 
