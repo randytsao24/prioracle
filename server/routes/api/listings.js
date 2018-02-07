@@ -10,9 +10,8 @@ module.exports = router;
 let attributes = ['id', 'name', 'description', 'category', 'condition', 'brand', 'status', 'sellerShips'];
 
 let runPy = new Promise((resolve, reject) => {
-  console.log("runPy initializing");
   const pyprog = spawn(
-    'python', 
+    'python3', 
     [path.resolve('scripts/python/algo-price-calculator.py')]
   );
   pyprog.stdout.on('data', (data) => {
@@ -34,7 +33,7 @@ router.get('/', async (ctx) => {
     include: [{ model: Valuation, attributes: ['metaPrice', 'algoPrice', 'scraperPrice', 'soldPrice', 'createdAt']}, { model: User, attributes: ['email', 'firstName', 'lastName']}],
     attributes: attributes
   });
-})
+});
 
 router.get('/:id', async (ctx) => {
   ctx.body = await Listing.findOne({
@@ -44,7 +43,17 @@ router.get('/:id', async (ctx) => {
     include: [{ model: Valuation, attributes: ['metaPrice', 'algoPrice', 'scraperPrice', 'soldPrice', 'createdAt']}, { model: User, attributes: ['email', 'firstName', 'lastName']}],
     attributes: attributes
   })
-})
+});
+
+router.delete('/:id', async (ctx) => {
+  const listingId = Number(ctx.params.id);
+  await Listing.destroy({
+    where: {
+      id: listingId
+    }
+  });
+  ctx.body = listingId;
+});
 
 router.post('/', async (ctx) => {
   let user = await User.findById(Number(ctx.request.body.userId));
@@ -56,7 +65,7 @@ router.post('/', async (ctx) => {
 
   const pythonOutput = await runPy.then((fromRunpy) => {
     return fromRunpy.toString();
-  }, (error) => console.log("runPy error: ", error));
+  });
 
   let price = await Valuation.create({
     algoPrice: pythonOutput,

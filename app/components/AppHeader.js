@@ -15,7 +15,7 @@ const AppHeader = ({ navigation }) => (
     <Header
       outerContainerStyles={styles.headerContainer}
       leftComponent={<HeaderMenu navigation={navigation} />}
-      centerComponent={{ text: 'P r i o r a c l e', style: { color: '#fff' } }}
+      centerComponent={{ text: 'P r i o r a c l e', style: { color: '#fff', fontSize: 20 } }}
       rightComponent={<HeaderHome navigation={navigation} />}
     />
   </View>

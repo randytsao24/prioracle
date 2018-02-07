@@ -11,6 +11,7 @@ import axios from 'axios';
 
 import { dbUrl, RootNavigator } from '../../App';
 import { fetchListings } from '../store';
+import { getValuationPrice } from '../utils';
 
 // Options for the button group for editing or posting the listing
 const optionGroup = ['Submit Listing', 'Edit'];
@@ -33,7 +34,7 @@ class ProductAnalysis extends Component {
       .then(res => res.data)
       .then(listing => this.setState({
         listing,
-        selectedPrice: Math.round( 0.01 * listing.valuations[listing.valuations.length - 1].metaPrice )
+        selectedPrice: getValuationPrice(listing.valuations[listing.valuations.length - 1])
       }))
       .catch(error => console.log('Error:', error));
   }
@@ -46,7 +47,7 @@ class ProductAnalysis extends Component {
         style={styles.container}
         behavior='padding' >
         <Card titleStyle={{color: 'red'}} title={`Pricing analysis for ${this.state.listing && this.state.listing.name}`} >
-          <Text>{'\n'}Prioracle has made a decision - a fair price for your product to sell at is ${`${valuations && Math.round( 0.01 * valuations[valuations.length - 1].metaPrice )}`}. You may modify the price below if you wish.{'\n'}</Text>
+          <Text>{'\n'}Prioracle has made a decision - a fair price for your product to sell at is ${`${valuations && getValuationPrice(valuations[valuations.length - 1])}`}. You may modify the price below if you wish.{'\n'}</Text>
           <FormLabel 
             labelStyle={styles.formLabel}>
             Suggested Price (USD)

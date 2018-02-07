@@ -42,7 +42,7 @@ class HeaderMenu extends Component {
         options={menuOptions}
         dropdownTextStyle={styles.dropdownText}
         onSelect={this.handleMenuSelection} >
-        <Icon name='menu' />
+        <Icon name='menu' size={30} />
       </ModalDropdown>
     );
   }

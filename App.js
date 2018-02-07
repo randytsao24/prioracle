@@ -21,17 +21,12 @@ import ListingError from './app/components/ListingError';
 
 
 // Use this link to access our backend!
-// export const dbUrl = 'http://172.16.23.11:8080';
-export const dbUrl = 'http://192.168.1.16:8080';
+export const dbUrl = 'http://172.16.23.244:8080';
+// export const dbUrl = 'http://192.168.1.16:8080';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    // Fetch all listings in our top-level component
-    store.dispatch(fetchListings());
   }
 
   render() {

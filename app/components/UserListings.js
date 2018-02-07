@@ -17,7 +17,6 @@ class UserListingItem extends Component {
     super(props);
 
     this.handleListingClick = this.handleListingClick.bind(this);
-    this.handleListingDelete = this.handleListingDelete.bind(this);
     this.handleListingData = this.handleListingData.bind(this);
 
   }
@@ -29,29 +28,24 @@ class UserListingItem extends Component {
     this.props.navigation.navigate('Listing', { id: this.props.itemId });
   }
 
-  handleListingDelete() {
-    this.props.deleteUserListing(this.props.itemId);
-  }
-
   render() {
     return (
       <View style={styles.listingItem} >
         <Text
           style={styles.itemText}
-          onPress={this.handleListingClick}
           adjustsFontSizeToFit={true} >
           {this.props.title}
         </Text>
         <Button
             containerViewStyle={styles.buttonContainer}
             buttonStyle={styles.buttonStyle}
-            icon={{ name: 'delete', color: 'red', size: 26, alignItems: 'right' }}
-            onPress={this.handleListingDelete} />
+            icon={{ name: 'line-graph', type: 'entypo', color: 'green', size: 26}}
+            onPress={this.handleListingData} />
         <Button
             containerViewStyle={styles.buttonContainer}
             buttonStyle={styles.buttonStyle}
-            icon={{ name: 'line-graph', type: 'entypo', color: 'green', size: 26}}
-            onPress={this.handleListingData} />
+            icon={{ name: 'delete', color: 'red', size: 26, alignItems: 'right' }}
+            onPress={() => this.props.deleteUserListing(Number(this.props.itemId))} />
       </View>
     )
   }
@@ -66,14 +60,24 @@ class UserListing extends Component {
     };
 
     this.renderItem = this.renderItem.bind(this);
+    this.deleteUserListing = this.deleteUserListing.bind(this);
   }
 
   componentDidMount() {
     // Fetch listings associated with logged-in user
-    axios.get(dbUrl + `/api/users/${this.props.user.id}/listings`)
-      .then(res => res.data)
-      .then(listings => this.setState({ userListings: listings }))
-      .catch(error => console.log(error));
+    // axios.get(dbUrl + `/api/users/${this.props.user.id}/listings`)
+    //   .then(res => res.data)
+    //   .then(listings => this.setState({ userListings: listings }))
+    //   .catch(error => console.log(error));
+  }
+
+  async deleteUserListing(listingId) {
+    console.log("listingId:", listingId);
+    await axios.delete(dbUrl + '/api/listings/' + listingId);
+
+    this.setState({
+      userListings: userListings.filter(listing => listing.id !== Number(listingId))
+    });
   }
 
   renderItem({item}) {
@@ -93,10 +97,12 @@ class UserListing extends Component {
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <Card titleStyle={{ color: 'red' }} title={`Listings for ${this.props.user && this.props.user.fullName}`}>
+          <Text>{this.props.listings.length === 0 && 'You don\'t have any listings!'}</Text>
           <FlatList
-            data={this.state.userListings}
+            data={this.props.listings}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index}
+            extraData={this.state}
           />
         </Card>
       </ScrollView>
@@ -131,7 +137,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
+    listings: state.listings
   };
 }
 

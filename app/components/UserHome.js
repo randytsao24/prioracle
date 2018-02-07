@@ -6,10 +6,16 @@ import { StyleSheet, Text, ScrollView } from 'react-native';
 import { Button, Card } from 'react-native-elements';
 import { StackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
+import { fetchUserListings } from '../store/index';
 
 class UserHome extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    // Fetch all listings in our top-level component
+    this.props.getListings(this.props.user.id);
   }
 
   render() {
@@ -63,4 +69,12 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(UserHome);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getListings(userId) {
+      dispatch(fetchUserListings(userId));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserHome);

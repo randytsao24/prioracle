@@ -6,7 +6,7 @@ import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
 
 export default HeaderHome = ({ navigation }) => (
-  <Icon name='home' onPress={() => navigation.navigate('UserHome')} />
+  <Icon name='home' size={30} onPress={() => navigation.navigate('UserHome')} />
 );
 
 const styles = StyleSheet.create({

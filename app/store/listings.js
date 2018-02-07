@@ -26,8 +26,8 @@ const addListingAction = (listing) => (
   {type: ADD_LISTING, listing}
 );
 
-const deleteListingAction = (listing) => (
-  {type: DELETE_LISTING, listing}
+const deleteListingAction = (listingId) => (
+  {type: DELETE_LISTING, listingId}
 );
 
 /**
@@ -39,6 +39,15 @@ export const fetchListings = function() {
       .then(res => res.data)
       .then(listings => dispatch(getListingsAction(listings)))
       .catch(err => console.log(err));
+  }
+}
+
+export const fetchUserListings = function(userId) {
+  return function thunk(dispatch) {
+    return axios.get(dbUrl + `/api/users/${userId}/listings`)
+      .then(res => res.data)
+      .then(listings => dispatch(getListingsAction(listings)))
+      .catch(error => console.log(error));
   }
 }
 
@@ -61,7 +70,7 @@ export const deleteListing = function(listingId) {
   return function thunk(dispatch) {
     return axios.delete(dbUrl + '/api/listings/' + listingId)
       .then(res => res.data)
-      .then(deletedListing => dispatch(deleteListingAction(listing)))
+      .then(deletedListing => dispatch(deleteListingAction(deletedListing)))
       .catch(err => console.log(err));
   }
 }
@@ -77,7 +86,7 @@ export default function (state = defaultListings, action) {
       return [...state, action.listing];
     case DELETE_LISTING:
       return state.filter((listing) => {
-        return listing.id !== action.listing.id
+        return listing.id !== action.listingId;
       });
     default:
       return state;
