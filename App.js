@@ -20,8 +20,7 @@ import Listing from './app/components/Listing';
 import ListingError from './app/components/ListingError';
 
 // Use this link to access our backend!
-export const dbUrl = 'http://172.16.23.244:8080';
-// export const dbUrl = 'http://192.168.1.16:8080';
+export const dbUrl = 'https://obscure-wave-65872.herokuapp.com';
 
 export default class App extends Component {
   constructor(props) {

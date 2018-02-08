@@ -4,9 +4,9 @@ const OpHelper = new OperationHelper({
   // awsId: process.env.AMAZON_AWS_ID,
   // awsSecret: process.env.AMAZON_API_SECRET,
   // assocId: process.env.AMAZON_ASSOCIATE_ID,
-  awsId: 'AKIAJVKS4SHSLFGXRFFA',
-  awsSecret: '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',
-  assocId: 'krisp1984-20',
+  awsId: process.env.awsId,
+  awsSecret: process.env.awsSecret,
+  assocId: process.env.assocId,
   locale: 'US'
 });
 
