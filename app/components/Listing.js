@@ -7,7 +7,7 @@ import { dbUrl, RootNavigator } from '../../App';
 import { Table, Row, Rows,} from 'react-native-table-component';
 import { LineChart, YAxis, XAxis } from 'react-native-svg-charts';
 import * as shape from 'd3-shape';
-
+import { getValuationPrice } from '../utils';
 
 export default class Listing extends Component {
   constructor(props) {
@@ -33,10 +33,10 @@ export default class Listing extends Component {
     let tableData = [];
     if (this.state.listing.valuations) {
         tableData = this.state.listing.valuations.map(valuation => {
-        return [valuation.createdAt.slice(0,10), valuation.metaPrice];
+        return [valuation.createdAt.slice(0,10), getValuationPrice(valuation)];
         });
         x = this.state.listing.valuations.map(valuation =>  valuation.createdAt.slice(0,10));
-        y = this.state.listing.valuations.map(valuation => (valuation.metaPrice));
+        y = this.state.listing.valuations.map(valuation => getValuationPrice(valuation));
     }
     const contentInset = { top: 20, bottom: 20 }
     return (

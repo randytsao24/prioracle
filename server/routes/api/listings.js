@@ -12,14 +12,20 @@ let attributes = ['id', 'name', 'description', 'category', 'condition', 'brand',
 let runPy = new Promise((resolve, reject) => {
   const pyprog = spawn(
     'python3', 
-    [path.resolve('scripts/python/algo-price-calculator.py')]
+    ['-u', path.resolve('scripts/python/algo-price-calculator.py')]
   );
+
   pyprog.stdout.on('data', (data) => {
+    console.log("runPy output:", data.toString());
     resolve(data);
   });
   pyprog.stderr.on('data', (data) => {
     reject(data);
   });
+
+  pyprog.stdout.write('data', (data) => {
+    console.log('data:', data);
+  })
 });
 
 
@@ -61,20 +67,25 @@ router.post('/', async (ctx) => {
   let listingInfo = ctx.request.body.listing;
   let updatedListings = [];
 
+  console.log('user info:', user.dataValues);
+
   let scraperPrice = await scrapePrice(listingInfo.name, listingInfo.condition);
+
+  let listing = await Listing.findOrCreate({
+    where: ctx.request.body.listing
+  });
 
   const pythonOutput = await runPy.then((fromRunpy) => {
     return fromRunpy.toString();
   });
 
+  console.log("pythonOutput:", pythonOutput);
+
   let price = await Valuation.create({
-    algoPrice: pythonOutput,
-    scraperPrice: scraperPrice.mean
+    algoPrice: 0,
+    scraperPrice: Number(scraperPrice.mean)
   });
 
-  let listing = await Listing.findOrCreate({
-    where: ctx.request.body.listing
-  });
   price = await price.setListing(listing[0]);
   listing = await Listing.findOrCreate({
     where: ctx.request.body.listing,
